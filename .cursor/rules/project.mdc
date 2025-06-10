@@ -1,0 +1,97 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Regras do Projeto Energy Savings Simulator
+
+## Stack Tecnológica
+- Framework: Next.js
+- Linguagem: TypeScript
+- Banco de Dados: PostgreSQL
+- Estilização: Tailwind CSS
+
+## Regras de Desenvolvimento
+
+### Código
+- Todo o código deve ser escrito em inglês
+- Nomes de variáveis, métodos e arquivos devem ser claros e objetivos
+- Implementar validação de dados em todos os lugares possíveis
+- Utilizar Hook Form e Zod para validações
+
+### Arquitetura
+- Desenvolvimento fullstack
+- Frontend e backend no mesmo repositório
+- Explorar recursos fullstack do Next.js
+
+### Documentação
+- README.md deve conter:
+  - Descrição do projeto
+  - Funcionalidades
+  - Instruções para execução
+
+### Estilização
+- Utilizar Tailwind CSS
+- Focar na experiência do usuário
+- Layout livre, priorizando usabilidade
+
+## Critérios de Avaliação
+- Arquitetura do projeto
+- Qualidade e organização do código
+- Modularização e estruturação
+- Funcionalidade e usabilidade
+
+## Funcionalidades Principais
+- Simulação de economia de energia
+- Captura de leads
+- Armazenamento de dados no PostgreSQL
+- Integração com setor comercial
+
+## Validações Obrigatórias
+- Dados do lead
+- Campos de formulário
+- Entradas do usuário
+- Cálculos de simulação
+
+## Padrões de Código
+```typescript
+// Exemplo de estrutura de validação
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+
+// Validação com Zod
+const leadSchema = z.object({
+  name: z.string().min(3),
+  email: z.string().email(),
+  // ... outros campos
+});
+
+// Uso com Hook Form
+const form = useForm({
+  resolver: zodResolver(leadSchema)
+});
+```
+
+## Estrutura de Diretórios Recomendada
+```
+/
+├── app/
+│   ├── api/
+│   └── (routes)/
+├── components/
+├── lib/
+│   ├── validations/
+│   └── database/
+├── styles/
+└── types/
+```
+
+## Boas Práticas
+1. Sempre validar dados antes de salvar
+2. Manter código modular e reutilizável
+3. Documentar funções e componentes
+4. Seguir padrões de acessibilidade
+5. Implementar tratamento de erros
+6. Manter consistência no estilo de código
+
+
