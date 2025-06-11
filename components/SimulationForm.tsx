@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { leadSchema, type LeadData } from '@/lib/validations/leadSchema';
 import { Modal } from './Modal';
+import Link from 'next/link';
 
 export function SimulationForm() {
   const [showSimulation, setShowSimulation] = useState(false);
@@ -51,7 +52,7 @@ export function SimulationForm() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="relative max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
