@@ -38,11 +38,22 @@ export function SimulationForm() {
 
   const onSubmit = async (data: LeadData) => {
     try {
+      const response = await fetch('/api/simulation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao salvar simulação');
+      }
+
       setShowSimulation(true);
-      // TODO: Implementar envio para API
-      console.log('Dados do lead:', data);
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
+      alert('Erro ao salvar simulação. Por favor, tente novamente.');
     }
   };
 

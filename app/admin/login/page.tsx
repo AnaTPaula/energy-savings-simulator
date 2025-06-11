@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
   });
 
   const onSubmit = (data: AdminLoginData) => {
-    // TODO: Implementar autenticação real
+    // TODO: Implement real authentication
     alert(`Login: ${data.email}`);
   };
 
