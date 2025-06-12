@@ -31,4 +31,13 @@ CREATE TABLE consumption (
 CREATE INDEX idx_consumption_lead_id ON consumption(lead_id);
 CREATE INDEX idx_leads_cpf ON leads(cpf);
 CREATE INDEX idx_leads_email ON leads(email);
-CREATE INDEX idx_users_email ON users(email); 
+CREATE INDEX idx_users_email ON users(email);
+
+-- Admin user insert
+-- password '123' hashed using bcrypt with 10 rounds
+INSERT INTO users (name, email, password)
+VALUES (
+    'Administrador',
+    'admin@admin.com',
+    '$2b$10$F5BUlpIrxDjVSTdhMGpAGO9Ka2ZqXhxCURa29xZTkPhMLrhBctl5.'
+); 
