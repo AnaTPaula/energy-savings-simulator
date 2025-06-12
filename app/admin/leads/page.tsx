@@ -11,7 +11,7 @@ export default function LeadsPage() {
 
   const fetchLeads = async () => {
     try {
-      const response = await fetch('/admin/leads/api');
+      const response = await fetch('/api/admin/leads');
       const data = await response.json();
       setLeads(data);
     } catch (error) {
@@ -23,7 +23,7 @@ export default function LeadsPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/admin/leads/api/${id}`, {
+      const response = await fetch(`/api/admin/leads/${id}`, {
         method: 'DELETE',
       });
 
