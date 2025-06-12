@@ -15,13 +15,25 @@ export async function DELETE(
       );
     }
 
+    // Start a transaction
+    await db.query('BEGIN');
+
+    // Delete related consumption records first
+    await db.query('DELETE FROM consumption WHERE lead_id = $1', [id]);
+
+    // Then delete the lead
     await db.query('DELETE FROM leads WHERE id = $1', [id]);
+
+    // Commit the transaction
+    await db.query('COMMIT');
 
     return NextResponse.json(
       { message: 'Lead excluído com sucesso' },
       { status: 200 }
     );
   } catch (error) {
+    // Rollback in case of error
+    await db.query('ROLLBACK');
     console.error('Erro ao excluir lead:', error);
     return NextResponse.json(
       { error: 'Erro ao excluir lead' },
