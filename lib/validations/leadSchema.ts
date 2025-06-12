@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const consumptionSchema = z.object({
-  monthlyBill: z.number().min(0, 'O valor da conta deve ser maior que zero'),
+  monthlyBill: z.number({
+    required_error: "Valor mensal da conta é obrigatório",
+    invalid_type_error: "Valor mensal da conta deve ser um número"
+  }).min(0, 'O valor da conta deve ser maior que zero'),
   city: z.string().min(2, 'Cidade inválida'),
   state: z.string().length(2, 'Estado deve ser uma sigla de 2 letras'),
   supplyType: z.enum(['Monofásico', 'Bifásico', 'Trifásico'], {

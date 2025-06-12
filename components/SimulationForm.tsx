@@ -22,7 +22,8 @@ export function SimulationForm() {
         state: '',
         supplyType: 'Monofásico'
       }
-    }
+    },
+    mode: 'onChange'
   });
 
   const calculateSavings = (monthlyBill: number) => {
@@ -70,11 +71,16 @@ export function SimulationForm() {
             <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">Dados de Consumo</h2>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Valor Mensal da Conta (R$)</label>
+              <label htmlFor="monthlyBill" className="block text-sm font-medium text-gray-700 mb-1">Valor Mensal da Conta (R$)</label>
               <input
+                id="monthlyBill"
                 type="number"
                 {...form.register('consumption.monthlyBill', { valueAsNumber: true })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.consumption?.monthlyBill
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
               {form.formState.errors.consumption?.monthlyBill && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.monthlyBill.message}</p>
@@ -82,34 +88,58 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
               <input
+                id="city"
                 type="text"
                 {...form.register('consumption.city')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.consumption?.city
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.consumption?.city && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.city.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado (UF)</label>
+              <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">Estado (UF)</label>
               <input
+                id="state"
                 type="text"
                 maxLength={2}
                 {...form.register('consumption.state')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.consumption?.state
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.consumption?.state && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.state.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Fornecimento</label>
+              <label htmlFor="supplyType" className="block text-sm font-medium text-gray-700 mb-1">Tipo de Fornecimento</label>
               <select
+                id="supplyType"
                 {...form.register('consumption.supplyType')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.consumption?.supplyType
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               >
                 <option value="Monofásico">Monofásico</option>
                 <option value="Bifásico">Bifásico</option>
                 <option value="Trifásico">Trifásico</option>
               </select>
+              {form.formState.errors.consumption?.supplyType && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.supplyType.message}</p>
+              )}
             </div>
           </div>
 
@@ -117,40 +147,72 @@ export function SimulationForm() {
             <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">Seus Dados</h2>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
               <input
+                id="name"
                 type="text"
                 {...form.register('name')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.name
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.name && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
               <input
+                id="email"
                 type="email"
                 {...form.register('email')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.email
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.email && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
               <input
+                id="phone"
                 type="tel"
                 {...form.register('phone')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.phone
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">CPF</label>
               <input
+                id="cpf"
                 type="text"
                 maxLength={11}
                 {...form.register('cpf')}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.cpf
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
               />
+              {form.formState.errors.cpf && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.cpf.message}</p>
+              )}
             </div>
           </div>
         </div>

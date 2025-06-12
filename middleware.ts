@@ -34,7 +34,8 @@ export async function middleware(request: NextRequest) {
         console.log('Token expirado:', {
           exp: payload.exp,
           currentTime,
-          difference: payload.exp - currentTime
+          difference: payload.exp - currentTime,
+          url: request.url
         });
         const response = NextResponse.redirect(new URL('/admin/login', request.url));
         response.cookies.delete('token');

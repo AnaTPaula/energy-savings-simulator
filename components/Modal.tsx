@@ -5,14 +5,18 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   title: string;
+  isError?: boolean;
 }
 
-export function Modal({ isOpen, onClose, children, title }: ModalProps) {
+export function Modal({ isOpen, onClose, children, title, isError }: ModalProps) {
   if (!isOpen) return null;
+
+  const modalClasses = isError ? "bg-red-50 border-red-300" : "bg-white";
+  const titleClasses = isError ? "text-red-800" : "text-gray-800";
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4 relative shadow-2xl transform transition-all animate-scaleIn">
+      <div className={`rounded-xl p-6 max-w-md w-full mx-4 relative shadow-2xl transform transition-all animate-scaleIn ${modalClasses}`}>
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -31,7 +35,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
             />
           </svg>
         </button>
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">{title}</h2>
+        <h2 className={`text-2xl font-bold mb-6 border-b pb-3 ${titleClasses}`}>{title}</h2>
         {children}
       </div>
     </div>

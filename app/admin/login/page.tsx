@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export default function AdminLoginPage() {
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   
   const form = useForm<AdminLoginData>({
@@ -16,6 +17,9 @@ export default function AdminLoginPage() {
 
   const onSubmit = async (data: AdminLoginData) => {
     try {
+      setIsLoading(true);
+      setError('');
+      
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -30,10 +34,15 @@ export default function AdminLoginPage() {
         throw new Error(result.error || 'Erro ao fazer login');
       }
 
+      // Aguardar um momento para garantir que o cookie seja processado
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Redirecionar para a página de leads
-      router.replace('/admin/leads');
+      router.push('/admin/leads');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Erro ao fazer login');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,7 +65,8 @@ export default function AdminLoginPage() {
           <input
             type="email"
             {...form.register('email')}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+            disabled={isLoading}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
           {form.formState.errors.email && (
             <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
@@ -67,7 +77,8 @@ export default function AdminLoginPage() {
           <input
             type="password"
             {...form.register('password')}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+            disabled={isLoading}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
           {form.formState.errors.password && (
             <p className="text-red-500 text-sm mt-1">{form.formState.errors.password.message}</p>
@@ -75,14 +86,23 @@ export default function AdminLoginPage() {
         </div>
         <button
           type="submit"
-          disabled={!form.formState.isValid}
-          className={`w-full py-3 px-4 rounded-md transition-all transform hover:scale-[1.02] ${
-            form.formState.isValid
+          disabled={!form.formState.isValid || isLoading}
+          className={`w-full py-3 px-4 rounded-md transition-all transform hover:scale-[1.02] relative ${
+            form.formState.isValid && !isLoading
               ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
-          Entrar
+          {isLoading ? (
+            <>
+              <span className="opacity-0">Entrar</span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            </>
+          ) : (
+            'Entrar'
+          )}
         </button>
       </form>
     </div>

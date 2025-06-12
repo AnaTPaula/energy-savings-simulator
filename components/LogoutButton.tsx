@@ -1,16 +1,23 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 export function LogoutButton() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Remove o token dos cookies
-    Cookies.remove('token');
-    // Força um refresh da página para limpar qualquer estado em memória
-    window.location.href = '/';
+  const handleLogout = async () => {
+    // Faz uma requisição POST para a rota de logout da API
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      // Redireciona para a página inicial após o logout bem-sucedido
+      router.push('/');
+    } else {
+      console.error('Falha ao fazer logout');
+      // Opcional: exibir uma mensagem de erro para o usuário
+    }
   };
 
   return (
