@@ -71,7 +71,7 @@ export function SimulationForm() {
             <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">Dados de Consumo</h2>
             
             <div>
-              <label htmlFor="monthlyBill" className="block text-sm font-medium text-gray-700 mb-1">Valor Mensal da Conta (R$)</label>
+              <label htmlFor="monthlyBill" className="block text-sm font-medium text-gray-700 mb-1">Valor Mensal da Conta (R$)*</label>
               <input
                 id="monthlyBill"
                 type="number"
@@ -88,7 +88,7 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Cidade*</label>
               <input
                 id="city"
                 type="text"
@@ -105,7 +105,7 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">Estado (UF)</label>
+              <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">Estado (UF)*</label>
               <input
                 id="state"
                 type="text"
@@ -147,7 +147,7 @@ export function SimulationForm() {
             <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">Seus Dados</h2>
             
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome*</label>
               <input
                 id="name"
                 type="text"
@@ -164,7 +164,7 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-mail*</label>
               <input
                 id="email"
                 type="email"
@@ -181,7 +181,7 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone*</label>
               <input
                 id="phone"
                 type="tel"
@@ -198,7 +198,7 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">CPF*</label>
               <input
                 id="cpf"
                 type="text"
