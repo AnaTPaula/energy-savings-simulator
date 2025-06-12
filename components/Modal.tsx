@@ -16,7 +16,7 @@ export function Modal({ isOpen, onClose, children, title, isError }: ModalProps)
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className={`rounded-xl p-6 max-w-md w-full mx-4 relative shadow-2xl transform transition-all animate-scaleIn ${modalClasses}`}>
+      <div className={`rounded-xl p-8 max-w-6xl w-full mx-4 relative shadow-2xl transform transition-all animate-scaleIn ${modalClasses}`}>
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -35,7 +35,7 @@ export function Modal({ isOpen, onClose, children, title, isError }: ModalProps)
             />
           </svg>
         </button>
-        <h2 className={`text-2xl font-bold mb-6 border-b pb-3 ${titleClasses}`}>{title}</h2>
+        <h2 className={`text-2xl font-bold mb-8 border-b pb-4 text-center ${titleClasses}`}>{title}</h2>
         {children}
       </div>
     </div>

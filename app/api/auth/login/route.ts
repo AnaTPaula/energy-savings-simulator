@@ -3,7 +3,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '@/lib/db';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'seu_segredo_jwt_aqui';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET não está definido nas variáveis de ambiente.');
+}
 
 export async function POST(request: Request) {
   try {
@@ -37,7 +41,7 @@ export async function POST(request: Request) {
     // Gerar token JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      JWT_SECRET,
+      JWT_SECRET!,
       { expiresIn: '1d' }
     );
 

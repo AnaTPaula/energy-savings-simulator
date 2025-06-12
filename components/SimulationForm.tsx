@@ -29,11 +29,20 @@ export function SimulationForm() {
   const calculateSavings = (monthlyBill: number) => {
     const discount = 0.25; // 25% de desconto
     const monthlySavings = monthlyBill * discount;
-    
+    const monthlyBillWithSavings = monthlyBill - monthlySavings;
+
     return {
-      oneYear: monthlySavings * 12,
-      threeYears: monthlySavings * 36,
-      fiveYears: monthlySavings * 60
+      oneYearSavings: monthlySavings * 12,
+      threeYearsSavings: monthlySavings * 36,
+      fiveYearsSavings: monthlySavings * 60,
+      
+      oneYearTotalBill: monthlyBill * 12,
+      threeYearsTotalBill: monthlyBill * 36,
+      fiveYearsTotalBill: monthlyBill * 60,
+
+      oneYearTotalWithSavings: monthlyBillWithSavings * 12,
+      threeYearsTotalWithSavings: monthlyBillWithSavings * 36,
+      fiveYearsTotalWithSavings: monthlyBillWithSavings * 60,
     };
   };
 
@@ -237,18 +246,53 @@ export function SimulationForm() {
         onClose={handleCloseModal}
         title="Simulação de Economia"
       >
-        <div className="space-y-4">
-          <div className="flex justify-between items-center border-b pb-3">
-            <span className="text-gray-600">Economia em 1 ano:</span>
-            <span className="font-semibold text-green-600">R$ {calculateSavings(form.watch('consumption.monthlyBill')).oneYear.toFixed(2)}</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="space-y-4 p-6 bg-gray-100 rounded-lg shadow-md min-w-[280px]">
+            <h3 className="text-xl font-bold text-gray-800 mb-3 border-b pb-2 text-center">1 Ano</h3>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total Pago:</span>
+              <span className="font-semibold text-gray-800 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).oneYearTotalBill)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Desconto:</span>
+              <span className="font-semibold text-green-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).oneYearSavings)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total com Desconto:</span>
+              <span className="font-semibold text-blue-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).oneYearTotalWithSavings)}</span>
+            </div>
           </div>
-          <div className="flex justify-between items-center border-b pb-3">
-            <span className="text-gray-600">Economia em 3 anos:</span>
-            <span className="font-semibold text-green-600">R$ {calculateSavings(form.watch('consumption.monthlyBill')).threeYears.toFixed(2)}</span>
+
+          <div className="space-y-4 p-6 bg-gray-100 rounded-lg shadow-md min-w-[280px]">
+            <h3 className="text-xl font-bold text-gray-800 mb-3 border-b pb-2 text-center">3 Anos</h3>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total Pago:</span>
+              <span className="font-semibold text-gray-800 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).threeYearsTotalBill)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Desconto:</span>
+              <span className="font-semibold text-green-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).threeYearsSavings)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total com Desconto:</span>
+              <span className="font-semibold text-blue-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).threeYearsTotalWithSavings)}</span>
+            </div>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">Economia em 5 anos:</span>
-            <span className="font-semibold text-green-600">R$ {calculateSavings(form.watch('consumption.monthlyBill')).fiveYears.toFixed(2)}</span>
+
+          <div className="space-y-4 p-6 bg-gray-100 rounded-lg shadow-md min-w-[280px]">
+            <h3 className="text-xl font-bold text-gray-800 mb-3 border-b pb-2 text-center">5 Anos</h3>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total Pago:</span>
+              <span className="font-semibold text-gray-800 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).fiveYearsTotalBill)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Desconto:</span>
+              <span className="font-semibold text-green-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).fiveYearsSavings)}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-700 whitespace-nowrap">Total com Desconto:</span>
+              <span className="font-semibold text-blue-600 flex-grow text-right ml-4">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateSavings(form.watch('consumption.monthlyBill')).fiveYearsTotalWithSavings)}</span>
+            </div>
           </div>
         </div>
       </Modal>
