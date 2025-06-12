@@ -9,8 +9,8 @@ export function LogoutButton() {
   const handleLogout = () => {
     // Remove o token dos cookies
     Cookies.remove('token');
-    // Redireciona para a página inicial
-    router.push('/');
+    // Força um refresh da página para limpar qualquer estado em memória
+    window.location.href = '/';
   };
 
   return (

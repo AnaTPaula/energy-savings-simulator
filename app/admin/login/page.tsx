@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { adminLoginSchema, AdminLoginData } from '@/lib/validations/adminLoginSchema';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 export default function AdminLoginPage() {
   const [error, setError] = useState<string>('');
@@ -31,9 +30,6 @@ export default function AdminLoginPage() {
         throw new Error(result.error || 'Erro ao fazer login');
       }
 
-      // Salvar token nos cookies
-      Cookies.set('token', result.token, { expires: 1 }); // Expira em 1 dia
-      
       // Redirecionar para a página de leads
       router.replace('/admin/leads');
     } catch (error) {

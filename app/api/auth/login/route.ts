@@ -41,7 +41,21 @@ export async function POST(request: Request) {
       { expiresIn: '1d' }
     );
 
-    return NextResponse.json({ token });
+    // Criar resposta com o token
+    const response = NextResponse.json({ token });
+
+    // Configurar o cookie com a mesma expiração do token (1 dia)
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 dia
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    });
+
+    return response;
   } catch (error) {
     console.error('Erro na autenticação:', error);
     return NextResponse.json(
