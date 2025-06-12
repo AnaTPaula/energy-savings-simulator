@@ -1,4 +1,6 @@
 import { LeadsTable } from '@/components/LeadsTable';
+import { LogoutButton } from '@/components/LogoutButton';
+import { HomeButton } from '@/components/HomeButton';
 import db from '@/lib/db';
 
 async function getLeads() {
@@ -26,7 +28,13 @@ export default async function LeadsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Listagem de Leads</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Listagem de Leads</h1>
+        <div className="flex gap-4">
+          <HomeButton />
+          <LogoutButton />
+        </div>
+      </div>
       <LeadsTable leads={leads} />
     </div>
   );

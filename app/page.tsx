@@ -6,7 +6,7 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         <div className="flex justify-end items-center mb-4">
-          <Link href="/admin/login">
+          <Link href="/admin/leads">
             <button
               type="button"
               className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
