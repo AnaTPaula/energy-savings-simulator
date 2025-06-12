@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 interface Lead {
   id: number;
@@ -13,10 +12,10 @@ interface Lead {
 
 interface LeadsTableProps {
   leads: Lead[];
+  onDelete: (id: string) => Promise<void>;
 }
 
-export function LeadsTable({ leads }: LeadsTableProps) {
-  const router = useRouter();
+export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [leadToDeleteId, setLeadToDeleteId] = useState<number | null>(null);
@@ -36,17 +35,8 @@ export function LeadsTable({ leads }: LeadsTableProps) {
 
     try {
       setIsDeleting(leadToDeleteId);
-      closeConfirmModal(); // Close modal immediately after starting delete
-
-      const response = await fetch(`/api/admin/leads/${leadToDeleteId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Falha ao excluir lead');
-      }
-
-      router.refresh();
+      closeConfirmModal();
+      await onDelete(leadToDeleteId.toString());
     } catch (error) {
       console.error('Erro ao excluir lead:', error);
     } finally {
@@ -76,7 +66,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody>
           {leads.map((lead) => (
             <tr key={lead.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
