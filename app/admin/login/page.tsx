@@ -1,18 +1,44 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { adminLoginSchema, AdminLoginData } from '@/lib/validations/adminLoginSchema';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 export default function AdminLoginPage() {
+  const [error, setError] = useState<string>('');
+  const router = useRouter();
+  
   const form = useForm<AdminLoginData>({
     resolver: zodResolver(adminLoginSchema),
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = (data: AdminLoginData) => {
-    // TODO: Implement real authentication
-    alert(`Login: ${data.email}`);
+  const onSubmit = async (data: AdminLoginData) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Erro ao fazer login');
+      }
+
+      // Salvar token nos cookies
+      Cookies.set('token', result.token, { expires: 1 }); // Expira em 1 dia
+      
+      // Redirecionar para a página de leads
+      router.replace('/admin/leads');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Erro ao fazer login');
+    }
   };
 
   return (
@@ -22,6 +48,13 @@ export default function AdminLoginPage() {
         className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm space-y-6"
       >
         <h1 className="text-2xl font-bold text-center mb-4">Login Administrador</h1>
+        
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            {error}
+          </div>
+        )}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
           <input
