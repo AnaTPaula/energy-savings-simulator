@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { LeadsTable } from '@/components/LeadsTable'
 
-// Mock do next/navigation
+// Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter() {
     return {
@@ -36,7 +36,7 @@ describe('LeadsTable', () => {
     jest.clearAllMocks()
   })
 
-  it('deve renderizar a tabela com os leads corretamente', () => {
+  it('should render the table with leads correctly', () => {
     render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     expect(screen.getByText('João Silva')).toBeInTheDocument()
@@ -47,7 +47,7 @@ describe('LeadsTable', () => {
     expect(screen.getByText('R$ 1.500,00')).toBeInTheDocument()
   })
 
-  it('deve abrir o modal de confirmação ao clicar em excluir', () => {
+  it('should open the confirmation modal when clicking delete', () => {
     render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     const deleteButtons = screen.getAllByText('Excluir')
@@ -58,7 +58,7 @@ describe('LeadsTable', () => {
     expect(screen.getByText('Tem certeza que deseja excluir este lead?')).toBeInTheDocument()
   })
 
-  it('deve fechar o modal ao clicar em cancelar', () => {
+  it('should close the modal when clicking cancel', () => {
     render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     const deleteButton = screen.getAllByText('Excluir')[0]
@@ -70,7 +70,7 @@ describe('LeadsTable', () => {
     expect(screen.queryByText('Confirmar Exclusão')).not.toBeInTheDocument()
   })
 
-  it('deve chamar a API de exclusão ao confirmar', async () => {
+  it('should call the delete API on confirmation', async () => {
     const mockOnDelete = jest.fn().mockResolvedValue(undefined)
     render(<LeadsTable leads={mockLeads} onDelete={mockOnDelete} searchTerm="" />)
 
@@ -85,7 +85,7 @@ describe('LeadsTable', () => {
     })
   })
 
-  it('deve mostrar mensagem de erro quando a exclusão falha', async () => {
+  it('should show error message when deletion fails', async () => {
     const mockOnDelete = jest.fn().mockRejectedValueOnce(new Error('Erro ao excluir'))
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
 

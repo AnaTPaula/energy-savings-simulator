@@ -8,7 +8,7 @@ describe('Modal', () => {
     mockOnClose.mockClear()
   })
 
-  it('não deve renderizar quando isOpen é false', () => {
+  it('should not render when isOpen is false', () => {
     render(
       <Modal isOpen={false} onClose={mockOnClose} title="Test Modal">
         <div>Modal Content</div>
@@ -19,7 +19,7 @@ describe('Modal', () => {
     expect(screen.queryByText('Modal Content')).not.toBeInTheDocument()
   })
 
-  it('deve renderizar corretamente quando isOpen é true', () => {
+  it('should render correctly when isOpen is true', () => {
     render(
       <Modal isOpen={true} onClose={mockOnClose} title="Test Modal">
         <div>Modal Content</div>
@@ -30,7 +30,7 @@ describe('Modal', () => {
     expect(screen.getByText('Modal Content')).toBeInTheDocument()
   })
 
-  it('deve chamar onClose quando o botão de fechar é clicado', () => {
+  it('should call onClose when the close button is clicked', () => {
     render(
       <Modal isOpen={true} onClose={mockOnClose} title="Test Modal">
         <div>Modal Content</div>
@@ -43,7 +43,7 @@ describe('Modal', () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1)
   })
 
-  it('deve aplicar classes de erro quando isError é true', () => {
+  it('should apply error classes when isError is true', () => {
     render(
       <Modal isOpen={true} onClose={mockOnClose} title="Test Modal" isError={true}>
         <div>Modal Content</div>

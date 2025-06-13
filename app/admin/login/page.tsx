@@ -34,10 +34,10 @@ export default function AdminLoginPage() {
         throw new Error(result.error || 'Erro ao fazer login');
       }
 
-      // Aguardar um momento para garantir que o cookie seja processado
+      // Wait a moment to ensure the cookie is processed
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Redirecionar para a página de leads
+      // Redirect to the leads page
       router.push('/admin/leads');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Erro ao fazer login');

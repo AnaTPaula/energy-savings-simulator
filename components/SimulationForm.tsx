@@ -27,7 +27,7 @@ export function SimulationForm() {
   });
 
   const calculateSavings = (monthlyBill: number) => {
-    const discount = 0.25; // 25% de desconto
+    const discount = 0.25; // 25% discount
     const monthlySavings = monthlyBill * discount;
     const monthlyBillWithSavings = monthlyBill - monthlySavings;
 

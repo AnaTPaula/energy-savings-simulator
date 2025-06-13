@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
 
-    // Buscar usuário no banco de dados
+    // Search for user in the database
     const result = await db.query(
       'SELECT * FROM users WHERE email = $1',
       [email]
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verificar senha
+    // Verify password
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -38,17 +38,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Gerar token JWT
+    // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       JWT_SECRET!,
       { expiresIn: '1d' }
     );
 
-    // Criar resposta com o token
+    // Create response with token
     const response = NextResponse.json({ token });
 
-    // Configurar o cookie com a mesma expiração do token (1 dia)
+    // Configure cookie with same expiration as token (1 day)
     response.cookies.set({
       name: 'token',
       value: token,

@@ -9,9 +9,9 @@ if (!JWT_SECRET) {
 }
 
 export async function middleware(request: NextRequest) {
-  // Verificar se a rota é administrativa
+  // Check if the route is administrative
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Ignorar a rota de login
+    // Ignore the login route
     if (request.nextUrl.pathname === '/admin/login') {
       return NextResponse.next();
     }
@@ -26,13 +26,13 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      // Verificar o token
+      // Verify the token
       const { payload } = await jwtVerify(
         token,
         new TextEncoder().encode(JWT_SECRET)
       );
 
-      // Verificar se o token expirou
+      // Check if the token has expired
       const currentTime = Math.floor(Date.now() / 1000);
       if (payload.exp && payload.exp < currentTime) {
         console.log('Token expirado:', {
@@ -46,11 +46,11 @@ export async function middleware(request: NextRequest) {
         return response;
       }
 
-      // Token válido
+      // Valid token
       console.log('Token válido, permitindo acesso');
       return NextResponse.next();
     } catch (error) {
-      // Token inválido ou expirado
+      // Invalid or expired token
       console.error('Erro ao verificar token:', error);
       const response = NextResponse.redirect(new URL('/admin/login', request.url));
       response.cookies.delete('token');

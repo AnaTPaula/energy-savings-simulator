@@ -6,17 +6,17 @@ export function LogoutButton() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    // Faz uma requisição POST para a rota de logout da API
+    // Makes a POST request to the API logout route
     const response = await fetch('/api/auth/logout', {
       method: 'POST',
     });
 
     if (response.ok) {
-      // Redireciona para a página inicial após o logout bem-sucedido
+      // Redirects to the homepage after successful logout
       router.push('/');
     } else {
       console.error('Falha ao fazer logout');
-      // Opcional: exibir uma mensagem de erro para o usuário
+      // Optional: display an error message to the user
     }
   };
 
