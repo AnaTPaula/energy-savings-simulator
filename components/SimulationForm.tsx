@@ -21,7 +21,7 @@ export function SimulationForm() {
       phone: '',
       cpf: '',
       consumption: {
-        monthlyBill: 0,
+        monthlyBill: undefined,
         city: '',
         state: '',
         supplyType: 'Monofásico'
@@ -253,6 +253,10 @@ export function SimulationForm() {
                 id="phone"
                 type="tel"
                 {...form.register('phone')}
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+                  form.setValue('phone', e.currentTarget.value, { shouldValidate: true });
+                }}
                 className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
                   form.formState.errors.phone
                     ? 'border-red-300 focus:border-red-500'
@@ -268,9 +272,15 @@ export function SimulationForm() {
               <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">CPF*</label>
               <input
                 id="cpf"
-                type="text"
+                type="tel"
                 maxLength={11}
+                pattern="[0-9]*"
+                inputMode="numeric"
                 {...form.register('cpf')}
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+                  form.setValue('cpf', e.currentTarget.value, { shouldValidate: true });
+                }}
                 className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
                   form.formState.errors.cpf
                     ? 'border-red-300 focus:border-red-500'
