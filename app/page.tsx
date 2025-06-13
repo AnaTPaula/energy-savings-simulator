@@ -9,7 +9,7 @@ export default function Home() {
           <Link href="/admin/leads">
             <button
               type="button"
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-md shadow hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
               title="Área do Administrador"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

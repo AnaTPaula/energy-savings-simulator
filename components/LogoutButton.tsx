@@ -14,8 +14,8 @@ export function LogoutButton() {
       });
 
       if (response.ok) {
-        // Redirect to login page after successful logout
-        router.push('/admin/login');
+        // Redirect to Home page after successful logout
+        router.push('/');
       } else {
         console.error('Falha ao fazer logout');
       }

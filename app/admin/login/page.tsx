@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { adminLoginSchema, AdminLoginData } from '@/lib/validations/adminLoginSchema';
 import { useRouter } from 'next/navigation';
+import { HomeButton } from '@/components/HomeButton';
 
 export default function AdminLoginPage() {
   const [error, setError] = useState<string>('');
@@ -48,6 +49,9 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="absolute top-4 right-4">
+        <HomeButton />
+      </div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm space-y-6"
@@ -86,23 +90,10 @@ export default function AdminLoginPage() {
         </div>
         <button
           type="submit"
-          disabled={!form.formState.isValid || isLoading}
-          className={`w-full py-3 px-4 rounded-md transition-all transform hover:scale-[1.02] relative ${
-            form.formState.isValid && !isLoading
-              ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
+          disabled={isLoading}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isLoading ? (
-            <>
-              <span className="opacity-0">Entrar</span>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            </>
-          ) : (
-            'Entrar'
-          )}
+          {isLoading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
     </div>
