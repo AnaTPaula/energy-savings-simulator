@@ -23,15 +23,15 @@ describe('SimulationForm', () => {
 
   it('deve validar campos obrigatórios', async () => {
     // Preencher apenas os campos de consumo para habilitar a validação dos outros campos
-    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)'), 'SP')
+    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
+    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
+    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
 
     // Preencher campos obrigatórios com valores inválidos
-    const nameInput = screen.getByLabelText('Nome')
-    const emailInput = screen.getByLabelText('E-mail')
-    const phoneInput = screen.getByLabelText('Telefone')
-    const cpfInput = screen.getByLabelText('CPF')
+    const nameInput = screen.getByLabelText('Nome*')
+    const emailInput = screen.getByLabelText('E-mail*')
+    const phoneInput = screen.getByLabelText('Telefone*')
+    const cpfInput = screen.getByLabelText('CPF*')
 
     // Preencher com valores inválidos
     await userEvent.type(nameInput, 'Jo') // Menos de 3 caracteres
@@ -56,13 +56,13 @@ describe('SimulationForm', () => {
 
   it('deve calcular a economia corretamente', async () => {
     // Preencher todos os campos
-    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)'), 'SP')
-    await userEvent.type(screen.getByLabelText('Nome'), 'João Silva')
-    await userEvent.type(screen.getByLabelText('E-mail'), 'joao@email.com')
-    await userEvent.type(screen.getByLabelText('Telefone'), '11999999999')
-    await userEvent.type(screen.getByLabelText('CPF'), '12345678900')
+    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
+    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
+    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
+    await userEvent.type(screen.getByLabelText('Nome*'), 'João Silva')
+    await userEvent.type(screen.getByLabelText('E-mail*'), 'joao@email.com')
+    await userEvent.type(screen.getByLabelText('Telefone*'), '11999999999')
+    await userEvent.type(screen.getByLabelText('CPF*'), '12345678900')
 
     // Enviar formulário
     const submitButton = screen.getByText('Simular Economia')
@@ -93,13 +93,13 @@ describe('SimulationForm', () => {
 
   it('deve validar formato de email', async () => {
     // Preencher campos de consumo para habilitar o botão
-    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)'), 'SP')
+    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
+    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
+    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
 
     // Preencher email inválido
-    await userEvent.type(screen.getByLabelText('E-mail'), 'email-invalido')
-    fireEvent.blur(screen.getByLabelText('E-mail'))
+    await userEvent.type(screen.getByLabelText('E-mail*'), 'email-invalido')
+    fireEvent.blur(screen.getByLabelText('E-mail*'))
 
     // Tentar enviar o formulário
     const submitButton = screen.getByText('Simular Economia')
@@ -113,13 +113,13 @@ describe('SimulationForm', () => {
 
   it('deve validar formato de CPF', async () => {
     // Preencher campos de consumo para habilitar o botão
-    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)'), 'SP')
+    await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
+    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
+    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
 
     // Preencher CPF inválido
-    await userEvent.type(screen.getByLabelText('CPF'), '123')
-    fireEvent.blur(screen.getByLabelText('CPF'))
+    await userEvent.type(screen.getByLabelText('CPF*'), '123')
+    fireEvent.blur(screen.getByLabelText('CPF*'))
 
     // Tentar enviar o formulário
     const submitButton = screen.getByText('Simular Economia')

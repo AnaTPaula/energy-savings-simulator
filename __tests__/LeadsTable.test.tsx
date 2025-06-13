@@ -37,7 +37,7 @@ describe('LeadsTable', () => {
   })
 
   it('deve renderizar a tabela com os leads corretamente', () => {
-    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} />)
+    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     expect(screen.getByText('João Silva')).toBeInTheDocument()
     expect(screen.getByText('Maria Santos')).toBeInTheDocument()
@@ -48,7 +48,7 @@ describe('LeadsTable', () => {
   })
 
   it('deve abrir o modal de confirmação ao clicar em excluir', () => {
-    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} />)
+    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     const deleteButtons = screen.getAllByText('Excluir')
     fireEvent.click(deleteButtons[0])
@@ -59,7 +59,7 @@ describe('LeadsTable', () => {
   })
 
   it('deve fechar o modal ao clicar em cancelar', () => {
-    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} />)
+    render(<LeadsTable leads={mockLeads} onDelete={jest.fn()} searchTerm="" />)
 
     const deleteButton = screen.getAllByText('Excluir')[0]
     fireEvent.click(deleteButton)
@@ -72,7 +72,7 @@ describe('LeadsTable', () => {
 
   it('deve chamar a API de exclusão ao confirmar', async () => {
     const mockOnDelete = jest.fn().mockResolvedValue(undefined)
-    render(<LeadsTable leads={mockLeads} onDelete={mockOnDelete} />)
+    render(<LeadsTable leads={mockLeads} onDelete={mockOnDelete} searchTerm="" />)
 
     const deleteButton = screen.getAllByText('Excluir')[0]
     fireEvent.click(deleteButton)
@@ -89,7 +89,7 @@ describe('LeadsTable', () => {
     const mockOnDelete = jest.fn().mockRejectedValueOnce(new Error('Erro ao excluir'))
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
 
-    render(<LeadsTable leads={mockLeads} onDelete={mockOnDelete} />)
+    render(<LeadsTable leads={mockLeads} onDelete={mockOnDelete} searchTerm="" />)
 
     const deleteButton = screen.getAllByText('Excluir')[0]
     fireEvent.click(deleteButton)
