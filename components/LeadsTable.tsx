@@ -13,9 +13,10 @@ interface Lead {
 interface LeadsTableProps {
   leads: Lead[];
   onDelete: (id: string) => Promise<void>;
+  searchTerm: string;
 }
 
-export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
+export function LeadsTable({ leads, onDelete, searchTerm }: LeadsTableProps) {
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [leadToDeleteId, setLeadToDeleteId] = useState<number | null>(null);
@@ -74,6 +75,12 @@ export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
     return 0;
   });
 
+  const filteredLeads = sortedLeads.filter((lead) =>
+    Object.values(lead).some((value) =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -121,7 +128,7 @@ export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
           </tr>
         </thead>
         <tbody>
-          {sortedLeads.map((lead) => (
+          {filteredLeads.map((lead) => (
             <tr key={lead.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {lead.name}

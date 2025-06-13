@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const fetchLeads = async () => {
     try {
@@ -48,10 +49,19 @@ export default function LeadsPage() {
           <LogoutButton />
         </div>
       </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Buscar leads..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       {loading ? (
         <div className="text-center">Carregando...</div>
       ) : (
-        <LeadsTable leads={leads} onDelete={handleDelete} />
+        <LeadsTable leads={leads} onDelete={handleDelete} searchTerm={searchTerm} />
       )}
     </div>
   );
