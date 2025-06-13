@@ -19,6 +19,8 @@ export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [leadToDeleteId, setLeadToDeleteId] = useState<number | null>(null);
+  const [sortColumn, setSortColumn] = useState<keyof Lead | null>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const openConfirmModal = (id: number) => {
     setLeadToDeleteId(id);
@@ -44,22 +46,74 @@ export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
     }
   };
 
+  const handleSort = (column: keyof Lead) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedLeads = [...leads].sort((a, b) => {
+    if (!sortColumn) return 0;
+
+    const aValue = a[sortColumn];
+    const bValue = b[sortColumn];
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortDirection === 'asc'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortDirection === 'asc'
+        ? aValue - bValue
+        : bValue - aValue;
+    }
+    return 0;
+  });
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-200 rounded-lg">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              onClick={() => handleSort('name')}
+            >
               Nome
+              {sortColumn === 'name' && (
+                <span>{sortDirection === 'asc' ? ' ▲' : ' ▼'}</span>
+              )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              onClick={() => handleSort('city')}
+            >
               Cidade
+              {sortColumn === 'city' && (
+                <span>{sortDirection === 'asc' ? ' ▲' : ' ▼'}</span>
+              )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              onClick={() => handleSort('state')}
+            >
               Estado
+              {sortColumn === 'state' && (
+                <span>{sortDirection === 'asc' ? ' ▲' : ' ▼'}</span>
+              )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              onClick={() => handleSort('billValue')}
+            >
               Valor da Fatura
+              {sortColumn === 'billValue' && (
+                <span>{sortDirection === 'asc' ? ' ▲' : ' ▼'}</span>
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Ações
@@ -67,7 +121,7 @@ export function LeadsTable({ leads, onDelete }: LeadsTableProps) {
           </tr>
         </thead>
         <tbody>
-          {leads.map((lead) => (
+          {sortedLeads.map((lead) => (
             <tr key={lead.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {lead.name}
