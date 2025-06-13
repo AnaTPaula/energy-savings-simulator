@@ -4,19 +4,27 @@ import { LeadsTable } from '@/components/LeadsTable';
 import { LogoutButton } from '@/components/LogoutButton';
 import { HomeButton } from '@/components/HomeButton';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const router = useRouter();
 
   const fetchLeads = async () => {
     try {
       const response = await fetch('/api/admin/leads');
+      if (response.status === 401 || response.status === 403) {
+        router.push('/admin/login');
+        return;
+      }
       const data = await response.json();
       setLeads(data);
     } catch (error) {
       console.error('Erro ao buscar leads:', error);
+      // Opcional: redirecionar para a página de login em caso de erro de rede ou outro erro inesperado
+      // router.push('/admin/login');
     } finally {
       setLoading(false);
     }
