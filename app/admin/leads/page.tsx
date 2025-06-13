@@ -25,7 +25,7 @@ export default function LeadsPage() {
       setLeads(data);
     } catch (error) {
       console.error('Erro ao buscar leads:', error);
-      // Opcional: redirecionar para a página de login em caso de erro de rede ou outro erro inesperado
+      // Optional: redirect to login page in case of network error or other unexpected error
       // router.push('/admin/login');
     } finally {
       setLoading(false);
