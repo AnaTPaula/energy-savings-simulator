@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "npm rebuild bcrypt --build-from-source"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
