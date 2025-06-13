@@ -14,7 +14,9 @@ export default function LeadsPage() {
 
   const fetchLeads = async () => {
     try {
-      const response = await fetch('/api/admin/leads');
+      const response = await fetch('/api/admin/leads', {
+        credentials: 'include'
+      });
       if (response.status === 401 || response.status === 403) {
         router.push('/admin/login');
         return;
@@ -34,6 +36,7 @@ export default function LeadsPage() {
     try {
       const response = await fetch(`/api/admin/leads/${id}`, {
         method: 'DELETE',
+        credentials: 'include'
       });
 
       if (response.ok) {
