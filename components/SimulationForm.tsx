@@ -1,12 +1,37 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { leadSchema, type LeadData } from '@/lib/validations/leadSchema';
 import { Modal } from './Modal';
 import Link from 'next/link';
 import { getStates, getCitiesByState } from '@/lib/api/ibge';
+
+// Phone and CPF formatting functions
+const formatPhoneNumber = (value: string) => {
+  if (!value) return "";
+  value = value.replace(/\D/g, ""); // Remove all non-digits
+
+  if (value.length > 11) {
+    value = value.substring(0, 11); // Limit to 11 digits
+  }
+
+  if (value.length <= 10) { // Format (XX) XXXX-XXXX
+    return value.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+  } else { // Format (XX) XXXXX-XXXX
+    return value.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  }
+};
+
+const formatCpf = (value: string) => {
+  if (!value) return "";
+  value = value.replace(/\D/g, ""); // Remove all non-digits
+  if (value.length > 11) {
+    value = value.substring(0, 11); // Limit to 11 digits
+  }
+  return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+};
 
 export function SimulationForm() {
   const [showSimulation, setShowSimulation] = useState(false);
@@ -108,7 +133,7 @@ export function SimulationForm() {
 
   return (
     <div className="relative max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg">
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" noValidate>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
             <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">Dados de Consumo</h2>
@@ -117,7 +142,8 @@ export function SimulationForm() {
               <label htmlFor="monthlyBill" className="block text-sm font-medium text-gray-700 mb-1">Valor Mensal da Conta (R$)*</label>
               <input
                 id="monthlyBill"
-                type="number"
+                type="text"
+                inputMode="numeric"
                 {...form.register('consumption.monthlyBill', { valueAsNumber: true })}
                 className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
                   form.formState.errors.consumption?.monthlyBill
@@ -249,19 +275,29 @@ export function SimulationForm() {
 
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone*</label>
-              <input
-                id="phone"
-                type="tel"
-                {...form.register('phone')}
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                  form.setValue('phone', e.currentTarget.value, { shouldValidate: true });
-                }}
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
-                  form.formState.errors.phone
-                    ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-blue-500'
-                }`}
+              <Controller
+                name="phone"
+                control={form.control}
+                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                  <input
+                    id="phone"
+                    type="tel"
+                    ref={ref}
+                    name={name}
+                    maxLength={15} // For the (XX) XXXXX-XXXX mask
+                    value={formatPhoneNumber(value)}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/\D/g, '');
+                      onChange(rawValue); // Update the raw value in RHF
+                    }}
+                    onBlur={onBlur}
+                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                      form.formState.errors.phone
+                        ? 'border-red-300 focus:border-red-500'
+                        : 'border-gray-300 focus:border-blue-500'
+                    }`}
+                  />
+                )}
               />
               {form.formState.errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
@@ -270,22 +306,31 @@ export function SimulationForm() {
 
             <div>
               <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">CPF*</label>
-              <input
-                id="cpf"
-                type="tel"
-                maxLength={11}
-                pattern="[0-9]*"
-                inputMode="numeric"
-                {...form.register('cpf')}
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                  form.setValue('cpf', e.currentTarget.value, { shouldValidate: true });
-                }}
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
-                  form.formState.errors.cpf
-                    ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-blue-500'
-                }`}
+              <Controller
+                name="cpf"
+                control={form.control}
+                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                  <input
+                    id="cpf"
+                    type="tel"
+                    ref={ref}
+                    name={name}
+                    maxLength={14} // For the XXX.XXX.XXX-XX mask
+                    pattern="[0-9.-]*" // Allow dots and hyphens for display
+                    inputMode="numeric"
+                    value={formatCpf(value)}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/\D/g, '');
+                      onChange(rawValue); // Update the raw value in RHF
+                    }}
+                    onBlur={onBlur}
+                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                      form.formState.errors.cpf
+                        ? 'border-red-300 focus:border-red-500'
+                        : 'border-gray-300 focus:border-blue-500'
+                    }`}
+                  />
+                )}
               />
               {form.formState.errors.cpf && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.cpf.message}</p>
