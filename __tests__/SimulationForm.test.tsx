@@ -10,8 +10,31 @@ describe('SimulationForm', () => {
   beforeEach(() => {
     // Reset mock before each test
     mockFetch.mockReset()
-    // Configure mock to return success
-    mockFetch.mockResolvedValueOnce({ ok: true })
+    
+    // Mock IBGE API responses
+    mockFetch.mockImplementation((url) => {
+      if (url.includes('servicodados.ibge.gov.br/api/v1/localidades/estados')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([
+            { id: 1, sigla: 'SP', nome: 'São Paulo' },
+            { id: 2, sigla: 'RJ', nome: 'Rio de Janeiro' }
+          ])
+        })
+      }
+      if (url.includes('servicodados.ibge.gov.br/api/v1/localidades/estados/SP/municipios')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([
+            { id: 1, nome: 'São Paulo' },
+            { id: 2, nome: 'Campinas' }
+          ])
+        })
+      }
+      // Default mock for simulation API
+      return Promise.resolve({ ok: true })
+    })
+
     render(<SimulationForm />)
   })
 
@@ -24,8 +47,13 @@ describe('SimulationForm', () => {
   it('should validate required fields', async () => {
     // Fill only consumption fields to enable validation of other fields
     await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
+    
+    // Select state and city from dropdowns
+    const stateSelect = screen.getByLabelText('Estado (UF)*')
+    const citySelect = screen.getByLabelText('Cidade*')
+    
+    await userEvent.selectOptions(stateSelect, 'SP')
+    await userEvent.selectOptions(citySelect, 'São Paulo')
 
     // Fill required fields with invalid values
     const nameInput = screen.getByLabelText('Nome*')
@@ -57,8 +85,14 @@ describe('SimulationForm', () => {
   it('should calculate savings correctly', async () => {
     // Fill all fields
     await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
+    
+    // Select state and city from dropdowns
+    const stateSelect = screen.getByLabelText('Estado (UF)*')
+    const citySelect = screen.getByLabelText('Cidade*')
+    
+    await userEvent.selectOptions(stateSelect, 'SP')
+    await userEvent.selectOptions(citySelect, 'São Paulo')
+    
     await userEvent.type(screen.getByLabelText('Nome*'), 'João Silva')
     await userEvent.type(screen.getByLabelText('E-mail*'), 'joao@email.com')
     await userEvent.type(screen.getByLabelText('Telefone*'), '11999999999')
@@ -94,8 +128,13 @@ describe('SimulationForm', () => {
   it('should validate email format', async () => {
     // Fill consumption fields to enable the button
     await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
+    
+    // Select state and city from dropdowns
+    const stateSelect = screen.getByLabelText('Estado (UF)*')
+    const citySelect = screen.getByLabelText('Cidade*')
+    
+    await userEvent.selectOptions(stateSelect, 'SP')
+    await userEvent.selectOptions(citySelect, 'São Paulo')
 
     // Fill invalid email
     await userEvent.type(screen.getByLabelText('E-mail*'), 'email-invalido')
@@ -114,8 +153,13 @@ describe('SimulationForm', () => {
   it('should validate CPF format', async () => {
     // Fill consumption fields to enable the button
     await userEvent.type(screen.getByLabelText('Valor Mensal da Conta (R$)*'), '1000')
-    await userEvent.type(screen.getByLabelText('Cidade*'), 'São Paulo')
-    await userEvent.type(screen.getByLabelText('Estado (UF)*'), 'SP')
+    
+    // Select state and city from dropdowns
+    const stateSelect = screen.getByLabelText('Estado (UF)*')
+    const citySelect = screen.getByLabelText('Cidade*')
+    
+    await userEvent.selectOptions(stateSelect, 'SP')
+    await userEvent.selectOptions(citySelect, 'São Paulo')
 
     // Fill invalid CPF
     await userEvent.type(screen.getByLabelText('CPF*'), '123')

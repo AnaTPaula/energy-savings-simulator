@@ -1,14 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { leadSchema, type LeadData } from '@/lib/validations/leadSchema';
 import { Modal } from './Modal';
 import Link from 'next/link';
+import { getStates, getCitiesByState } from '@/lib/api/ibge';
 
 export function SimulationForm() {
   const [showSimulation, setShowSimulation] = useState(false);
+  const [states, setStates] = useState<{ id: number; sigla: string; nome: string; }[]>([]);
+  const [cities, setCities] = useState<{ id: number; nome: string; }[]>([]);
+  const [selectedState, setSelectedState] = useState<string>('');
   const form = useForm<LeadData>({
     resolver: zodResolver(leadSchema),
     defaultValues: {
@@ -25,6 +29,36 @@ export function SimulationForm() {
     },
     mode: 'onChange'
   });
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const fetchedStates = await getStates();
+        setStates(fetchedStates);
+      } catch (error) {
+        console.error("Failed to fetch states:", error);
+      }
+    };
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    if (selectedState) {
+      const fetchCities = async () => {
+        try {
+          const fetchedCities = await getCitiesByState(selectedState);
+          setCities(fetchedCities);
+        } catch (error) {
+          console.error("Failed to fetch cities:", error);
+          setCities([]); // Clear cities on error
+        }
+      };
+      fetchCities();
+    } else {
+      setCities([]); // Clear cities if no state is selected
+      form.setValue('consumption.city', ''); // Clear city value in form
+    }
+  }, [selectedState, form]);
 
   const calculateSavings = (monthlyBill: number) => {
     const discount = 0.25; // 25% discount
@@ -97,37 +131,61 @@ export function SimulationForm() {
             </div>
 
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Cidade*</label>
-              <input
-                id="city"
-                type="text"
-                {...form.register('consumption.city')}
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
-                  form.formState.errors.consumption?.city
-                    ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-blue-500'
-                }`}
-              />
-              {form.formState.errors.consumption?.city && (
-                <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.city.message}</p>
-              )}
-            </div>
-
-            <div>
               <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">Estado (UF)*</label>
-              <input
+              <select
                 id="state"
-                type="text"
-                maxLength={2}
-                {...form.register('consumption.state')}
+                {...form.register('consumption.state', {
+                  required: 'Estado é obrigatório',
+                  validate: (value) => states.some(state => state.sigla === value) || 'Estado inválido',
+                })}
+                onChange={(e) => {
+                  setSelectedState(e.target.value);
+                  form.setValue('consumption.state', e.target.value, { shouldValidate: true });
+                }}
                 className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
                   form.formState.errors.consumption?.state
                     ? 'border-red-300 focus:border-red-500'
                     : 'border-gray-300 focus:border-blue-500'
                 }`}
-              />
+              >
+                <option value="">Selecione o estado</option>
+                {states.map((state) => (
+                  <option key={state.id} value={state.sigla}>
+                    {state.sigla}
+                  </option>
+                ))}
+              </select>
               {form.formState.errors.consumption?.state && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.state.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Cidade*</label>
+              <select
+                id="city"
+                {...form.register('consumption.city', {
+                  required: 'Cidade é obrigatória',
+                  validate: (value) => cities.some(city => city.nome === value) || 'Cidade inválida',
+                })}
+                onChange={(e) => {
+                  form.setValue('consumption.city', e.target.value, { shouldValidate: true });
+                }}
+                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 transition-colors ${
+                  form.formState.errors.consumption?.city
+                    ? 'border-red-300 focus:border-red-500'
+                    : 'border-gray-300 focus:border-blue-500'
+                }`}
+              >
+                <option value="">Selecione a cidade</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.nome}>
+                    {city.nome}
+                  </option>
+                ))}
+              </select>
+              {form.formState.errors.consumption?.city && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.consumption.city.message}</p>
               )}
             </div>
 
